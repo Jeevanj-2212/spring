@@ -3,6 +3,8 @@ package com.example.restApi.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,10 +23,19 @@ public class EmployeeController {
 	@Autowired
 	EmployeeService emps;
 	
-	@GetMapping("/emp/id/{id}")
-    public Employee findById(@PathVariable("id") int id) {
-	   return emps.getById(id);
-   }
+	@GetMapping("/id/{id}")
+	public ResponseEntity<Employee> findById(@PathVariable("id") int id) {
+	    Employee emp = emps.getById(id);
+	    
+	    // Debugging line - Print the employee object
+	    System.out.println("Employee fetched: " + emp);
+
+	    if (emp == null) {
+	        return ResponseEntity.notFound().build(); // Returns 404 if not found
+	    }
+	    return ResponseEntity.ok(emp);
+	}
+
 	
 	@GetMapping("/listAll")
 	public List<Employee> getAll() {
@@ -35,7 +46,7 @@ public class EmployeeController {
 	public Employee insert(@RequestBody Employee emp) {
 		return emps.addEmployee(emp);
 	}
-	 @GetMapping("/delete/{id}")
+	 @DeleteMapping("/delete/{id}")
 	public String delete(@PathVariable("id") int id) {
 		return emps.deleteById(id);
 	}

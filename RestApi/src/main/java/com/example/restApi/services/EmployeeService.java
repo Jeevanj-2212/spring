@@ -14,8 +14,11 @@ public class EmployeeService {
 	@Autowired
 	EmployeeRepository repo;
 	public Employee getById(int id) {
-		return repo.findById(id).orElse(null);
+	    Employee emp = repo.findById(id).orElse(null);
+	    System.out.println("Employee fetched: " + emp);
+	    return emp;
 	}
+
 	
 	public List<Employee> readAllEmp() {
 		 List<Employee> emp  = repo.findAll();
